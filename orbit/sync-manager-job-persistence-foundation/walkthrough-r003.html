@@ -375,25 +375,13 @@
   </head>
   <body>
     <nav class="sidenav" aria-label="Site navigation">
-      <a href="../../index.html" aria-label="Back to all artifacts"
-        ><svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M15 18l-6-6 6-6" /></svg
-        ><span class="label">All artifacts</span></a
-      >
+      <a href="../../index.html" aria-label="Back to all artifacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" /></svg><span class="label">All artifacts</span></a>
     </nav>
     <a class="skip" href="#overview">Skip to overview</a>
     <main>
       <nav aria-label="Walkthrough sections">
-        <a href="#overview">1. Overview</a><a href="#context">2. System context</a
-        ><a href="#runtime">3. Runtime walkthrough</a><a href="#contracts">4. Data model and contracts</a>
+        <a href="#overview">1. Overview</a><a href="#context">2. System context</a><a href="#runtime">3. Runtime walkthrough</a><a href="#contracts">4. Data model and contracts</a>
       </nav>
       <section id="overview" aria-labelledby="overview-heading">
         <div class="eyebrow">1 / Overview</div>
@@ -453,12 +441,7 @@
           the DynamoDB client submits requests. This layer does not authenticate users or fetch Canvas/SIS data.
         </p>
         <figure>
-          <div
-            class="diagram"
-            tabindex="0"
-            role="region"
-            aria-label="System diagram; scroll horizontally on narrow screens"
-          >
+          <div class="diagram" tabindex="0" role="region" aria-label="System diagram; scroll horizontally on narrow screens">
             <svg viewBox="0 0 980 500" role="img" aria-labelledby="context-title context-desc">
               <title id="context-title">New storage modules and their current callers</title>
               <desc id="context-desc">
@@ -467,28 +450,11 @@
                 connected to this repository; Canvas and SIS are not called.
               </desc>
               <defs>
-                <marker
-                  id="context-arrow"
-                  viewBox="0 0 10 10"
-                  refX="9"
-                  refY="5"
-                  markerWidth="7"
-                  markerHeight="7"
-                  orient="auto"
-                >
+                <marker id="context-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
                   <path d="M0 0 L10 5 L0 10z" fill="#455b70" />
                 </marker>
               </defs>
-              <rect
-                x="265"
-                y="15"
-                width="445"
-                height="470"
-                rx="14"
-                fill="none"
-                stroke="#8b9eb0"
-                stroke-dasharray="6 5"
-              />
+              <rect x="265" y="15" width="445" height="470" rx="14" fill="none" stroke="#8b9eb0" stroke-dasharray="6 5"/>
               <text x="285" y="42" class="small">APPLICATION MODULES</text>
               <rect x="15" y="70" width="220" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396" />
               <text x="31" y="99" class="bold">Local test caller</text>
@@ -508,34 +474,13 @@
               <rect x="290" y="385" width="390" height="75" rx="10" fill="#e9eef3" stroke="#61758a" />
               <text x="306" y="414" class="bold">Existing handlers + workers</text>
               <text x="306" y="438" class="small">No calls to the new repository</text>
-              <rect
-                x="15"
-                y="385"
-                width="220"
-                height="75"
-                rx="10"
-                fill="#fff3db"
-                stroke="#965900"
-                stroke-dasharray="5 4"
-              />
+              <rect x="15" y="385" width="220" height="75" rx="10" fill="#fff3db" stroke="#965900" stroke-dasharray="5 4"/>
               <text x="31" y="414" class="bold">Canvas / SIS</text>
               <text x="31" y="438" class="small">No calls from this feature</text>
               <path d="M235 112 H290" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)" />
               <path d="M485 155 V220" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)" />
-              <path
-                d="M680 253 H722 V198 H750"
-                fill="none"
-                stroke="#455b70"
-                stroke-width="2"
-                marker-end="url(#context-arrow)"
-              />
-              <path
-                d="M680 273 H722 V332 H750"
-                fill="none"
-                stroke="#455b70"
-                stroke-width="2"
-                marker-end="url(#context-arrow)"
-              />
+              <path d="M680 253 H722 V198 H750" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/>
+              <path d="M680 273 H722 V332 H750" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/>
             </svg>
           </div>
           <figcaption>
@@ -544,9 +489,7 @@
           </figcaption>
         </figure>
         <div class="legend" aria-label="Diagram legend">
-          <span class="key new">Added or changed</span><span class="key store">New persistent store</span
-          ><span class="key">Existing, unchanged</span><span class="key external">External system</span
-          ><span>Dashed outline: application modules</span>
+          <span class="key new">Added or changed</span><span class="key store">New persistent store</span><span class="key">Existing, unchanged</span><span class="key external">External system</span><span>Dashed outline: application modules</span>
         </div>
         <div class="grid">
           <div class="card">
@@ -556,13 +499,9 @@
               <code>SyncManagerJobHistory</code> stores operation results and deleted-job records. SAM gives both
               generated names, on-demand billing, deletion protection and retention on stack deletion/replacement.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../deploy/lti-sync-manager-template.yaml"
-                ><code>deploy/lti-sync-manager-template.yaml</code></a
-              >
-              · SyncManagerJobs / SyncManagerJobHistory</span
-            >
+            <span class="evidence">Evidence:
+              <a href="../../../../../deploy/lti-sync-manager-template.yaml"><code>deploy/lti-sync-manager-template.yaml</code></a>
+              · SyncManagerJobs / SyncManagerJobHistory</span>
           </div>
           <div class="card">
             <h3>Infrastructure does not activate a workflow</h3>
@@ -571,13 +510,9 @@
               table names, but this change adds no production caller or IAM policy. Deployment permissions, backup
               approval and production integration remain separate work.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../docs/sync-manager-job-persistence.md"
-                ><code>docs/sync-manager-job-persistence.md</code></a
-              >
-              · Infrastructure and responsibilities before activation</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/docs/sync-manager-job-persistence.md" target="_blank" rel="noopener noreferrer"><code>docs/sync-manager-job-persistence.md</code></a>
+              · Infrastructure and responsibilities before activation</span>
           </div>
         </div>
       </section>
@@ -590,12 +525,7 @@
           transaction. A lease is the recorded ownership deadline; expiry alone grants no replacement ownership.
         </p>
         <figure>
-          <div
-            class="diagram"
-            tabindex="0"
-            role="region"
-            aria-label="Numbered runtime diagram; scroll horizontally on narrow screens"
-          >
+          <div class="diagram" tabindex="0" role="region" aria-label="Numbered runtime diagram; scroll horizontally on narrow screens">
             <svg viewBox="0 0 980 735" role="img" aria-labelledby="runtime-title runtime-desc">
               <title id="runtime-title">A local test creates, claims and completes a sync job</title>
               <desc id="runtime-desc">
@@ -604,15 +534,7 @@
                 event. The text below explains each step and the failure paths.
               </desc>
               <defs>
-                <marker
-                  id="runtime-arrow"
-                  viewBox="0 0 10 10"
-                  refX="9"
-                  refY="5"
-                  markerWidth="7"
-                  markerHeight="7"
-                  orient="auto"
-                >
+                <marker id="runtime-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
                   <path d="M0 0 L10 5 L0 10z" fill="#455b70" />
                 </marker>
               </defs>
@@ -682,10 +604,9 @@
               snapshots and state. Canvas IDs remain strings; SIS IDs are trimmed without losing leading zeroes. This
               step makes no storage call.
             </p>
-            <span class="evidence"
-              >Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> ·
-              createSyncJob / normalizeSyncJob; spec AC-1, 14</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/models/syncJob.mjs" target="_blank" rel="noopener noreferrer"><code>src/models/syncJob.mjs</code></a>
+              · createSyncJob / normalizeSyncJob; spec AC-1, 14</span>
           </li>
           <li>
             <h3>Check the request and any earlier result</h3>
@@ -695,13 +616,9 @@
               this job and operation. Matching, unexpired input returns the saved result; reused IDs with different
               input conflict.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobOperations.mjs"
-                ><code>src/repositories/syncJobOperations.mjs</code></a
-              >
-              · normalizeOperation / operationDigest; AC-9, 14</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobOperations.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobOperations.mjs</code></a>
+              · normalizeOperation / operationDigest; AC-9, 14</span>
           </li>
           <li>
             <h3>Save all creation records together</h3>
@@ -711,13 +628,9 @@
               All inserts succeed together; another job with the same section/course/instructor mapping returns
               <code>already_exists</code>.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                ><code>src/repositories/syncJobRepository.mjs</code></a
-              >
-              · addJobCreationWrites / executeJobOperation; AC-2, 11</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+              · addJobCreationWrites / executeJobOperation; AC-2, 11</span>
           </li>
           <li>
             <h3>Load the requested job before claiming it</h3>
@@ -727,13 +640,9 @@
               physical key, deployment and model. Missing or inconsistent records return <code>missing</code> to the
               claim caller.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                ><code>src/repositories/syncJobRepository.mjs</code></a
-              >
-              · getById / readValidJobRecord; AC-3</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+              · getById / readValidJobRecord; AC-3</span>
           </li>
           <li>
             <h3>Claim the job and lock the section</h3>
@@ -742,13 +651,9 @@
               RUNNING, saves the worker/run/generation and expiry, inserts a section lock only if absent, and records
               the claim. A competing section claim returns <code>lock_conflict</code> and leaves its job queued.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                ><code>src/repositories/syncJobRepository.mjs</code></a
-              >
-              · addJobClaimWrites; AC-4, 5</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+              · addJobClaimWrites; AC-4, 5</span>
           </li>
           <li>
             <h3>Extend this worker’s lease</h3>
@@ -757,13 +662,9 @@
               updates both lease-expiry values and records the result together. Neither expiry can move backward. Expiry
               alone does not remove the lock or allow another worker to claim it.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                ><code>src/repositories/syncJobRepository.mjs</code></a
-              >
-              · addLeaseExtensionWrites / jobAndLockMatchOwner; AC-6</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+              · addLeaseExtensionWrites / jobAndLockMatchOwner; AC-6</span>
           </li>
           <li>
             <h3>Save the outcome and release the lock</h3>
@@ -773,13 +674,9 @@
               appends the event in one transaction. It leaves <code>desired_state</code> untouched, including a
               concurrent pause.
             </p>
-            <span class="evidence"
-              >Evidence:
-              <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                ><code>src/repositories/syncJobRepository.mjs</code></a
-              >
-              · addRunCompletionWrites; AC-6</span
-            >
+            <span class="evidence">Evidence:
+              <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+              · addRunCompletionWrites; AC-6</span>
           </li>
         </ol>
         <details>
@@ -800,20 +697,13 @@
             For a recovered claim, <code>ownershipCurrent</code> is true only if the current job and section lock still
             match that worker. A previously successful claim alone does not allow a worker to start external work.
           </p>
-          <span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobRepository.mjs"
-              ><code>src/repositories/syncJobRepository.mjs</code></a
-            >
-            · checkOperationOutcome / checkRecordedOperationResult / executeJobOperation</span
-          ><span class="evidence"
-            >Evidence: <a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a> ·
-            transactWrite</span
-          ><span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/utils/errorClassifier.js"><code>src/utils/errorClassifier.js</code></a> ·
-            classifyDynamoDbTransactionError; AC-9, 12</span
-          >
+          <span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+            · checkOperationOutcome / checkRecordedOperationResult / executeJobOperation</span><span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/clients/ddbClient.js" target="_blank" rel="noopener noreferrer"><code>src/clients/ddbClient.js</code></a>
+            · transactWrite</span><span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/utils/errorClassifier.js" target="_blank" rel="noopener noreferrer"><code>src/utils/errorClassifier.js</code></a>
+            · classifyDynamoDbTransactionError; AC-9, 12</span>
         </details>
         <details>
           <summary>Pause, deletion and delayed requests</summary>
@@ -832,13 +722,9 @@
             deleted job cannot modify its replacement, even after deletion history expires. There is no lock takeover or
             recovery worker in this change.
           </p>
-          <span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobRepository.mjs"
-              ><code>src/repositories/syncJobRepository.mjs</code></a
-            >
-            · addDesiredStateWrite / addJobDeletionWrites; AC-4–8</span
-          >
+          <span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+            · addDesiredStateWrite / addJobDeletionWrites; AC-4–8</span>
         </details>
         <details>
           <summary>Account lookups find jobs; the job record supplies authorization data</summary>
@@ -853,19 +739,11 @@
             the existing authorization policy. Lookup records and display names never grant access. The existing list
             endpoint is not switched to these methods.
           </p>
-          <span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobRepository.mjs"
-              ><code>src/repositories/syncJobRepository.mjs</code></a
-            >
-            · listJobLocatorsForAccount / loadJobsFromLocators</span
-          ><span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobStorage.mjs"
-              ><code>src/repositories/syncJobStorage.mjs</code></a
-            >
-            · readBatch; AC-3, 12</span
-          >
+          <span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
+            · listJobLocatorsForAccount / loadJobsFromLocators</span><span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobStorage.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobStorage.mjs</code></a>
+            · readBatch; AC-3, 12</span>
         </details>
         <div class="notice">
           <strong>Accepted limitation for unusually deep account paths (SC-001).</strong> A path containing 97 accounts
@@ -881,12 +759,7 @@
           Caller’s job and operation → validated IDs, state and summary → derived database keys and input hash → job
           changes plus history → applied result, conflict or indeterminate outcome
         </p>
-        <div
-          class="table-wrap"
-          tabindex="0"
-          role="region"
-          aria-label="Data objects; scroll horizontally on narrow screens"
-        >
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Data objects; scroll horizontally on narrow screens">
           <table>
             <thead>
               <tr>
@@ -969,14 +842,11 @@
             </tbody>
           </table>
         </div>
-        <span class="evidence"
-          >Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> ·
-          JOB_FIELDS / normalizeLastRun</span
-        ><span class="evidence"
-          >Evidence:
-          <a href="../../../../../src/repositories/syncJobKeys.mjs"><code>src/repositories/syncJobKeys.mjs</code></a> ·
-          jobKey / locatorKey / accountKey / lockKey / operationKey / fenceKey</span
-        >
+        <span class="evidence">Evidence:
+          <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/models/syncJob.mjs" target="_blank" rel="noopener noreferrer"><code>src/models/syncJob.mjs</code></a>
+          · JOB_FIELDS / normalizeLastRun</span><span class="evidence">Evidence:
+          <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobKeys.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobKeys.mjs</code></a>
+          · jobKey / locatorKey / accountKey / lockKey / operationKey / fenceKey</span>
         <details>
           <summary>Encoding, expiry and information kept out of history</summary>
           <p>
@@ -995,19 +865,11 @@
             History excludes full job/mapping, creator-name and account/display snapshots. It retains actor or worker
             identities for internal use; it is not anonymous telemetry. It excludes raw upstream error payloads.
           </p>
-          <span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobOperations.mjs"
-              ><code>src/repositories/syncJobOperations.mjs</code></a
-            >
-            · operationDigest / createOperationEvent</span
-          ><span class="evidence"
-            >Evidence:
-            <a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"
-              ><code>src/repositories/syncJobHistoryRepository.mjs</code></a
-            >
-            · getOperation / getFence / query; AC-9, 10</span
-          >
+          <span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobOperations.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobOperations.mjs</code></a>
+            · operationDigest / createOperationEvent</span><span class="evidence">Evidence:
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobHistoryRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobHistoryRepository.mjs</code></a>
+            · getOperation / getFence / query; AC-9, 10</span>
         </details>
         <details>
           <summary>Field types and stored shapes</summary>
@@ -1025,17 +887,13 @@
           </p>
           <p>
             <strong>Event:</strong> keys plus
-            <code
-              >job_id, operationId, operationType, inputDigest, occurredAt, expires_at, actor, owner, transition,
-              result</code
-            >. <strong>Deletion record:</strong> keys plus <code>job_id, operationId, occurredAt, expires_at</code>.
+            <code>job_id, operationId, operationType, inputDigest, occurredAt, expires_at, actor, owner, transition,
+              result</code>. <strong>Deletion record:</strong> keys plus <code>job_id, operationId, occurredAt, expires_at</code>.
             Events retain the operation result, not a copy of the whole job.
           </p>
           <p>
             See
-            <a href="../../../../../docs/sync-manager-job-persistence.md"
-              >the complete persistence schema and synthetic JSON examples</a
-            >
+            <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/docs/sync-manager-job-persistence.md" target="_blank" rel="noopener noreferrer">the complete persistence schema and synthetic JSON examples</a>
             for every required field, nullable value and operation result.
           </p>
         </details>
@@ -1045,12 +903,7 @@
           results come from validation r004 at this exact HEAD. This walkthrough independently checked the source claims
           without rerunning backend suites.
         </p>
-        <div
-          class="table-wrap"
-          tabindex="0"
-          role="region"
-          aria-label="Contract and test evidence; scroll horizontally on narrow screens"
-        >
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Contract and test evidence; scroll horizontally on narrow screens">
           <table>
             <thead>
               <tr>
@@ -1063,63 +916,40 @@
               <tr>
                 <th scope="row">Valid IDs, state and creator facts<br />AC-1, 14</th>
                 <td>
-                  <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a
-                  ><br /><a href="../../../../../src/repositories/syncJobOperations.mjs"
-                    ><code>src/repositories/syncJobOperations.mjs</code></a
-                  >
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/models/syncJob.mjs" target="_blank" rel="noopener noreferrer"><code>src/models/syncJob.mjs</code></a>
+                  <br />
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobOperations.mjs" target="_blank" rel="noopener noreferrer">
+                    <code>src/repositories/syncJobOperations.mjs</code></a>
                 </td>
                 <td>
-                  <a href="../../../../../test/models/syncJob.test.mjs"><code>test/models/syncJob.test.mjs</code></a
-                  ><br /><a href="../../../../../test/repositories/syncJobRepository.test.mjs"
-                    ><code>test/repositories/syncJobRepository.test.mjs</code></a
-                  >
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/models/syncJob.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/models/syncJob.test.mjs</code></a><br /><a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/repositories/syncJobRepository.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/repositories/syncJobRepository.test.mjs</code></a>
                 </td>
               </tr>
               <tr>
                 <th scope="row">Creation, reads, ownership and deletion<br />AC-2–8</th>
                 <td>
-                  <a href="../../../../../src/repositories/syncJobRepository.mjs"
-                    ><code>src/repositories/syncJobRepository.mjs</code></a
-                  >
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobRepository.mjs</code></a>
                 </td>
                 <td>
-                  <a href="../../../../../test/integration/syncJobPersistence.local.test.mjs"
-                    ><code>test/integration/syncJobPersistence.local.test.mjs</code></a
-                  ><br />Transactions, competing claims, pause/finish and delete/recreate cases.
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/integration/syncJobPersistence.local.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/integration/syncJobPersistence.local.test.mjs</code></a><br />Transactions, competing claims, pause/finish and delete/recreate cases.
                 </td>
               </tr>
               <tr>
                 <th scope="row">Lost responses, expiry and transaction limits<br />AC-9–12</th>
                 <td>
-                  <a href="../../../../../src/repositories/syncJobStorage.mjs"
-                    ><code>src/repositories/syncJobStorage.mjs</code></a
-                  ><br /><a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"
-                    ><code>src/repositories/syncJobHistoryRepository.mjs</code></a
-                  ><br /><a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a>
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobStorage.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobStorage.mjs</code></a><br /><a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/repositories/syncJobHistoryRepository.mjs" target="_blank" rel="noopener noreferrer"><code>src/repositories/syncJobHistoryRepository.mjs</code></a><br /><a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/src/clients/ddbClient.js" target="_blank" rel="noopener noreferrer"><code>src/clients/ddbClient.js</code></a>
                 </td>
                 <td>
-                  <a href="../../../../../test/repositories/syncJobTransaction.test.mjs"
-                    ><code>test/repositories/syncJobTransaction.test.mjs</code></a
-                  ><br /><a href="../../../../../test/clients/ddbPersistence.test.mjs"
-                    ><code>test/clients/ddbPersistence.test.mjs</code></a
-                  ><br />Response-loss and expiry cases in the local persistence suite.
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/repositories/syncJobTransaction.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/repositories/syncJobTransaction.test.mjs</code></a><br /><a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/clients/ddbPersistence.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/clients/ddbPersistence.test.mjs</code></a><br />Response-loss and expiry cases in the local persistence suite.
                 </td>
               </tr>
               <tr>
                 <th scope="row">Table configuration without activation<br />AC-13</th>
                 <td>
-                  <a href="../../../../../deploy/lti-sync-manager-template.yaml"
-                    ><code>deploy/lti-sync-manager-template.yaml</code></a
-                  ><br /><a href="../../../../../docker/dynamodb/init-sync-manager-tables.sh"
-                    ><code>docker/dynamodb/init-sync-manager-tables.sh</code></a
-                  >
+                  <a href="../../../../../deploy/lti-sync-manager-template.yaml"><code>deploy/lti-sync-manager-template.yaml</code></a><br /><a href="../../../../../docker/dynamodb/init-sync-manager-tables.sh"><code>docker/dynamodb/init-sync-manager-tables.sh</code></a>
                 </td>
                 <td>
-                  <a href="../../../../../test/deploy/sync-manager-job-tables.test.mjs"
-                    ><code>test/deploy/sync-manager-job-tables.test.mjs</code></a
-                  ><br /><a href="../../../../../test/integration/syncJobInitialization.local.test.mjs"
-                    ><code>test/integration/syncJobInitialization.local.test.mjs</code></a
-                  >
+                  <a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/deploy/sync-manager-job-tables.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/deploy/sync-manager-job-tables.test.mjs</code></a><br /><a href="https://github.com/ucsf-education/canvas/tree/feature/CES-164/persistence-foundation/test/integration/syncJobInitialization.local.test.mjs" target="_blank" rel="noopener noreferrer"><code>test/integration/syncJobInitialization.local.test.mjs</code></a>
                 </td>
               </tr>
             </tbody>
