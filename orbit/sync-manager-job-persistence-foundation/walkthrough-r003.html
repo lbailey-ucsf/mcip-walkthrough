@@ -1,30 +1,1167 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sync Manager job storage — review walkthrough r003</title><style>*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:#f4f6f8;color:#162c40;font:17px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1160px;margin:auto;padding:32px 28px}section{margin:0 0 32px;background:white;border:1px solid #c8d2dc;border-radius:14px;padding:28px;scroll-margin-top:20px}h1{font-size:36px;line-height:1.15;margin:8px 0 18px;letter-spacing:-.02em}h2{font-size:27px;line-height:1.25;margin:0 0 16px}h3{font-size:19px;line-height:1.3;margin:0 0 8px}p{margin:8px 0 14px}a{color:#125e9c;text-underline-offset:3px}a:hover{text-decoration-thickness:3px}a:focus-visible,summary:focus-visible,.diagram:focus-visible,.table-wrap:focus-visible{outline:3px solid #8b3800;outline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:12px 24px;margin:0 0 18px}.eyebrow{color:#455b70;font-size:13px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.lead{font-size:20px;max-width:950px}.notice{border-left:5px solid #965900;background:#fff3db;padding:12px 16px;margin:16px 0}.focus{background:#eef4f9;padding:16px 20px;border-radius:8px}.focus p{margin:4px 0}.meta{font-size:13px;color:#455b70}.meta code{font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{border:1px solid #c8d2dc;border-radius:8px;padding:18px}.evidence{display:block;font-size:13px;color:#455b70;margin-top:10px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88em;overflow-wrap:anywhere}figure{margin:20px 0}.diagram{overflow-x:auto;border:1px solid #c8d2dc;border-radius:10px;background:#f9fbfd;padding:10px}svg{display:block;width:100%;min-width:770px;height:auto}svg text{font-family:system-ui,-apple-system,sans-serif;fill:#162c40;font-size:16px}svg .small{font-size:14px}svg .bold{font-weight:700}figcaption,.legend{font-size:14px;color:#455b70;margin:8px 0}.legend{display:flex;gap:16px;flex-wrap:wrap}.key:before{content:"";display:inline-block;width:15px;height:12px;margin-right:6px;border:1px solid #61758a;background:#e9eef3}.key.new:before{background:#e7f1fc;border-color:#2d6396}.key.store:before{background:#e5f3ed;border-color:#327559}.key.external:before{background:#fff3db;border-style:dashed;border-color:#965900}.steps{list-style:none;counter-reset:steps;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:18px}.steps li{counter-increment:steps;border-top:3px solid #2d6396;padding:14px 0}.steps h3:before{content:counter(steps) ". ";color:#125e9c}details{border:1px solid #c8d2dc;border-radius:8px;padding:14px 18px;margin:12px 0}summary{cursor:pointer;font-weight:700}details[open] summary{margin-bottom:14px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:15px;min-width:760px}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #c8d2dc;padding:13px 12px}thead th{background:#edf3f8}tbody th{width:23%}.lineage{background:#eef4f9;padding:16px;border-radius:8px}footer{font-size:13px;color:#455b70;padding:0 12px 28px}ul{padding-left:23px}.skip{position:absolute;top:-100px;background:white;padding:12px}.skip:focus{top:4px;left:4px}.sidenav{position:fixed;top:0;left:0;width:56px;height:100vh;background:#162c40;display:flex;flex-direction:column;align-items:center;margin:0;padding:16px 0;z-index:20}.sidenav a{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;color:#dbe6f0;text-decoration:none}.sidenav a:hover{background:#24405a;color:white}.sidenav a:focus-visible{outline:3px solid #8b3800;outline-offset:2px}.sidenav svg{display:block;width:22px;height:22px;min-width:0}.sidenav .label{position:absolute;left:52px;white-space:nowrap;background:#162c40;color:white;font-size:13px;padding:6px 10px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .12s}.sidenav a:hover .label,.sidenav a:focus-visible .label{opacity:1}body{padding-left:56px} @media(max-width:700px){main{padding:18px 12px}section{padding:20px 16px}h1{font-size:29px}h2{font-size:24px}.lead{font-size:18px}.grid,.steps{grid-template-columns:1fr}nav{gap:10px 16px}.sidenav{width:100%;height:auto;flex-direction:row;justify-content:flex-start;padding:8px 12px}.sidenav a{width:auto;padding:0 6px}.sidenav svg{width:20px;height:20px}.sidenav .label{position:static;opacity:1;background:none;color:#dbe6f0;padding:0 0 0 8px}body{padding-left:0}}@media print{body{background:white;padding-left:0}main{max-width:none;padding:0}section{break-inside:avoid;page-break-inside:auto}nav,.skip,.sidenav{display:none}details{break-inside:avoid}}</style></head><body><nav class="sidenav" aria-label="Site navigation"><a href="../../index.html" aria-label="Back to all artifacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span class="label">All artifacts</span></a></nav><a class="skip" href="#overview">Skip to overview</a><main><nav aria-label="Walkthrough sections"><a href="#overview">1. Overview</a><a href="#context">2. System context</a><a href="#runtime">3. Runtime walkthrough</a><a href="#contracts">4. Data model and contracts</a></nav>
-<section id="overview" aria-labelledby="overview-heading"><div class="eyebrow">1 / Overview</div><h1 id="overview-heading">Save sync jobs and track run ownership</h1><p class="lead">This change adds storage for Sync Manager jobs and their operation history. It prevents duplicate mappings and two workers claiming the same section, and lets a caller check whether a write succeeded when its response was lost.</p><p><strong>No production caller is connected.</strong> Synthetic internal callers supply jobs and worker requests. The new repository saves jobs, lookup records and locks in one DynamoDB table, and operation results in a second. Existing API, UI and worker behavior stays unchanged.</p><div class="notice"><strong>Validated at this HEAD.</strong> <a href="../validation/validation-r004.md">Validation r004</a> recommends MERGE for this inactive foundation: all 14 criteria pass, with no unresolved Critical, High or Medium findings.</div><div class="focus"><h3>Review focus</h3><p><strong>Start:</strong> <code>syncJobRepository.mjs</code>, especially <code>executeJobOperation</code> and the helpers that build each operation’s writes.</p><p><strong>Key decision:</strong> save each job change, related lock or lookup changes, and its history event in one transaction.</p><p><strong>Check closely:</strong> the expected job ID and current worker must still match when DynamoDB commits; an old success must never stand in for current ownership.</p><p><strong>Limits:</strong> no production dispatch or expired-lock takeover; unusually deep account paths can require more deletion actions than one transaction allows.</p></div><details><summary>Exact review baseline and source artifacts</summary><p class="meta"><strong>Scope:</strong> full feature; no parent slices.<br><strong>BASE_REF:</strong> <code>d268d46f280cad1e3c72d91710f0715aad448614</code><br><strong>HEAD_REF:</strong> <code>688cba8c1a15430df081d29bf8e51b1354ecb012</code><br><strong>HEAD tree:</strong> <code>2defd126bb9c36b8cdbaefd891c8d96a2181274a</code><br><strong>Generated:</strong> 2026-09-18T01:47:40+00:00 · approved <a href="../specification/spec-r002.md">spec r002</a> · <a href="../run.md">run index</a></p></details></section>
-<section id="context" aria-labelledby="context-heading"><div class="eyebrow">2 / System context</div><h2 id="context-heading">The repository owns the storage rules</h2><p>Callers must authenticate and authorize access before using this API; current tests supply synthetic identities and job data. The repository validates those inputs and decides which records must change together; the DynamoDB client submits requests. This layer does not authenticate users or fetch Canvas/SIS data.</p><figure><div class="diagram" tabindex="0" role="region" aria-label="System diagram; scroll horizontally on narrow screens"><svg viewBox="0 0 980 500" role="img" aria-labelledby="context-title context-desc"><title id="context-title">New storage modules and their current callers</title><desc id="context-desc">Local tests call the new job model and repository. The repository uses the existing DynamoDB client with added methods to read and write two new tables. Existing application handlers and workers are not connected to this repository; Canvas and SIS are not called.</desc><defs><marker id="context-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#455b70"/></marker></defs><rect x="265" y="15" width="445" height="470" rx="14" fill="none" stroke="#8b9eb0" stroke-dasharray="6 5"/><text x="285" y="42" class="small">APPLICATION MODULES</text><rect x="15" y="70" width="220" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396"/><text x="31" y="99" class="bold">Local test caller</text><text x="31" y="123" class="small">Synthetic job and operation</text><rect x="290" y="70" width="390" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396"/><text x="306" y="99" class="bold">Job model + repository</text><text x="306" y="123" class="small">Validate inputs; build each transaction</text><rect x="290" y="220" width="390" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396"/><text x="306" y="249" class="bold">DynamoDB client</text><text x="306" y="273" class="small">Existing client; added transaction / read methods</text><rect x="750" y="155" width="215" height="85" rx="10" fill="#e5f3ed" stroke="#327559"/><text x="766" y="184" class="bold">Jobs table</text><text x="766" y="208" class="small">Jobs, lookups, locks</text><rect x="750" y="290" width="215" height="85" rx="10" fill="#e5f3ed" stroke="#327559"/><text x="766" y="319" class="bold">History table</text><text x="766" y="343" class="small">Operation results, deletions</text><rect x="290" y="385" width="390" height="75" rx="10" fill="#e9eef3" stroke="#61758a"/><text x="306" y="414" class="bold">Existing handlers + workers</text><text x="306" y="438" class="small">No calls to the new repository</text><rect x="15" y="385" width="220" height="75" rx="10" fill="#fff3db" stroke="#965900" stroke-dasharray="5 4"/><text x="31" y="414" class="bold">Canvas / SIS</text><text x="31" y="438" class="small">No calls from this feature</text><path d="M235 112 H290" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/><path d="M485 155 V220" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/><path d="M680 253 H722 V198 H750" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/><path d="M680 273 H722 V332 H750" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)"/></svg></div><figcaption>Arrows show current calls and database requests. Components with no connecting arrow are outside this feature’s runtime path.</figcaption></figure><div class="legend" aria-label="Diagram legend"><span class="key new">Added or changed</span><span class="key store">New persistent store</span><span class="key">Existing, unchanged</span><span class="key external">External system</span><span>Dashed outline: application modules</span></div><div class="grid"><div class="card"><h3>Two new tables</h3><p><code>SyncManagerJobs</code> stores current jobs, lookup records and section locks. <code>SyncManagerJobHistory</code> stores operation results and deleted-job records. SAM gives both generated names, on-demand billing, deletion protection and retention on stack deletion/replacement.</p><span class="evidence">Evidence: <a href="../../../../../deploy/lti-sync-manager-template.yaml"><code>deploy/lti-sync-manager-template.yaml</code></a> · SyncManagerJobs / SyncManagerJobHistory</span></div><div class="card"><h3>Infrastructure does not activate a workflow</h3><p>Only history has TTL cleanup. Jobs and locks do not expire automatically. Environment variables expose table names, but this change adds no production caller or IAM policy. Deployment permissions, backup approval and production integration remain separate work.</p><span class="evidence">Evidence: <a href="../../../../../docs/sync-manager-job-persistence.md"><code>docs/sync-manager-job-persistence.md</code></a> · Infrastructure and responsibilities before activation</span></div></div></section>
-<section id="runtime" aria-labelledby="runtime-heading"><div class="eyebrow">3 / Runtime walkthrough</div><h2 id="runtime-heading">Create a job, claim its section, save the result</h2><p>This path follows the local tests: they create an ACTIVE / QUEUED job, then call the repository as a worker. No scheduler or Canvas synchronization runs here. Each successful operation also saves an event in the same transaction. A lease is the recorded ownership deadline; expiry alone grants no replacement ownership.</p><figure><div class="diagram" tabindex="0" role="region" aria-label="Numbered runtime diagram; scroll horizontally on narrow screens"><svg viewBox="0 0 980 735" role="img" aria-labelledby="runtime-title runtime-desc"><title id="runtime-title">A local test creates, claims and completes a sync job</title><desc id="runtime-desc">Seven steps show input validation, replay checks, creation, verified lookup, claiming a section, extending ownership and completion. Writes update the job and related records together with an operation event. The text below explains each step and the failure paths.</desc><defs><marker id="runtime-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#455b70"/></marker></defs><text x="70" y="30" class="small">ACTION</text><text x="302" y="30" class="small">COMPONENT AND CHECK</text><text x="728" y="30" class="small">RESULT</text><rect x="55" y="48" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="85" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="91" text-anchor="middle" class="bold">1</text><text x="70" y="91" class="bold">Validate job</text><text x="302" y="91" class="small">Model checks identity and state</text><text x="728" y="91" class="small">Normalized job + UUID</text><path d="M505 123 V144" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="144" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="181" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="187" text-anchor="middle" class="bold">2</text><text x="70" y="187" class="bold">Check request</text><text x="302" y="187" class="small">Repository checks input and history</text><text x="728" y="187" class="small">New or recorded result</text><path d="M505 219 V240" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="240" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="277" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="283" text-anchor="middle" class="bold">3</text><text x="70" y="283" class="bold">Save new job</text><text x="302" y="283" class="small">Create job, lookups and event</text><text x="728" y="283" class="small">One complete transaction</text><path d="M505 315 V336" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="336" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="373" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="379" text-anchor="middle" class="bold">4</text><text x="70" y="379" class="bold">Load for claim</text><text x="302" y="379" class="small">Read by UUID; verify stored job</text><text x="728" y="379" class="small">Matching job + queued run</text><path d="M505 411 V432" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="432" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="469" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="475" text-anchor="middle" class="bold">5</text><text x="70" y="475" class="bold">Claim run + section</text><text x="302" y="475" class="small">Set RUNNING; create absent lock</text><text x="728" y="475" class="small">One section owner</text><path d="M505 507 V528" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="528" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="565" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="571" text-anchor="middle" class="bold">6</text><text x="70" y="571" class="bold">Extend lease</text><text x="302" y="571" class="small">Match worker on job and lock</text><text x="728" y="571" class="small">Both expiry values updated</text><path d="M505 603 V624" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)"/><rect x="55" y="624" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396"/><circle cx="24" cy="661" r="19" fill="#e5f3ed" stroke="#327559"/><text x="24" y="667" text-anchor="middle" class="bold">7</text><text x="70" y="667" class="bold">Finish run</text><text x="302" y="667" class="small">Save result; clear run; delete lock</text><text x="728" y="667" class="small">IDLE / FAILED + history</text></svg></div><figcaption>Read top to bottom. Each row’s number matches the explanation below. Blue boxes are repository/model actions; arrows show call order.</figcaption></figure><ol class="steps">
-<li><h3>Validate the job data</h3><p><code>createSyncJob</code> assigns a UUIDv4 and validates mapping IDs, creator identities, account path, snapshots and state. Canvas IDs remain strings; SIS IDs are trimmed without losing leading zeroes. This step makes no storage call.</p><span class="evidence">Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> · createSyncJob / normalizeSyncJob; spec AC-1, 14</span></li>
-<li><h3>Check the request and any earlier result</h3><p><code>create</code> requires the job, actor, operation ID and occurrence time. Unexpected fields and inconsistent actor/time values are rejected before I/O. The repository then reads the history event for this job and operation. Matching, unexpired input returns the saved result; reused IDs with different input conflict.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobOperations.mjs"><code>src/repositories/syncJobOperations.mjs</code></a> · normalizeOperation / operationDigest; AC-9, 14</span></li>
-<li><h3>Save all creation records together</h3><p><code>addJobCreationWrites</code> builds conditional inserts for the job, its UUID lookup and each account lookup. <code>executeJobOperation</code> adds the event, checks the whole transaction’s size and sends it. All inserts succeed together; another job with the same section/course/instructor mapping returns <code>already_exists</code>.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · addJobCreationWrites / executeJobOperation; AC-2, 11</span></li>
-<li><h3>Load the requested job before claiming it</h3><p>The next call supplies the job UUID, worker/run/generation and lease expiry. After checking input and history, <code>getById</code> follows the UUID lookup to the job record. It verifies the stored UUID, physical key, deployment and model. Missing or inconsistent records return <code>missing</code> to the claim caller.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · getById / readValidJobRecord; AC-3</span></li>
-<li><h3>Claim the job and lock the section</h3><p><code>addJobClaimWrites</code> requires ACTIVE / QUEUED and the same queued run ID. One transaction sets RUNNING, saves the worker/run/generation and expiry, inserts a section lock only if absent, and records the claim. A competing section claim returns <code>lock_conflict</code> and leaves its job queued.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · addJobClaimWrites; AC-4, 5</span></li>
-<li><h3>Extend this worker’s lease</h3><p><code>heartbeat</code> requires the job UUID, run, worker and generation to match both job and lock. It updates both lease-expiry values and records the result together. Neither expiry can move backward. Expiry alone does not remove the lock or allow another worker to claim it.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · addLeaseExtensionWrites / jobAndLockMatchOwner; AC-6</span></li>
-<li><h3>Save the outcome and release the lock</h3><p><code>finish</code> validates the matching owner and run times, then sets IDLE for SUCCESS or FAILED for FAILURE. It saves the sanitized summary, clears <code>activeRun</code>, deletes that worker’s lock and appends the event in one transaction. It leaves <code>desired_state</code> untouched, including a concurrent pause.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · addRunCompletionWrites; AC-6</span></li></ol>
-<details><summary>When the database may have committed but the response is lost</summary><p>The client disables automatic SDK transaction retries. For an uncertain result, the repository reads the exact operation event instead of resending the write. A matching unexpired event returns <code>status: 'applied', recovered: true</code>. Missing, expired or unreadable history returns <code>indeterminate</code>: the caller still cannot tell whether the write committed.</p><p><code>checkOperationOutcome(type, input)</code> checks again without writing. The caller keeps the original operation ID, input and timestamps. Use operation type <code>desired</code> when checking a <code>changeDesiredState</code> result. Confirmed contention/capacity failures use bounded retries; business-condition failures and invalid requests are handled separately.</p><p>For a recovered claim, <code>ownershipCurrent</code> is true only if the current job and section lock still match that worker. A previously successful claim alone does not allow a worker to start external work.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · checkOperationOutcome / checkRecordedOperationResult / executeJobOperation</span><span class="evidence">Evidence: <a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a> · transactWrite</span><span class="evidence">Evidence: <a href="../../../../../src/utils/errorClassifier.js"><code>src/utils/errorClassifier.js</code></a> · classifyDynamoDbTransactionError; AC-9, 12</span></details>
-<details><summary>Pause, deletion and delayed requests</summary><p><strong>Pause first:</strong> a later claim fails. <strong>Claim first:</strong> pause changes desired state while the worker remains RUNNING and may still finish. Conditions are checked at commit, so a stale preliminary read cannot overwrite another operation’s fields.</p><p><strong>Delete:</strong> a nonrunning job can be removed together with every lookup record. The same transaction saves a deletion event and a deleted-job record, called <code>FENCE</code> in storage. Running jobs cannot be deleted.</p><p>A recreated mapping receives a new UUID. Every mutation checks the requested UUID; delayed requests for the deleted job cannot modify its replacement, even after deletion history expires. There is no lock takeover or recovery worker in this change.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · addDesiredStateWrite / addJobDeletionWrites; AC-4–8</span></details>
-<details><summary>Account lookups find jobs; the job record supplies authorization data</summary><p><code>listJobLocatorsForAccount</code> returns lookup records and a continuation key. <code>loadJobsFromLocators</code> batch-loads the matching jobs with consistent reads, checks their UUID, key and deployment, and excludes missing or inconsistent jobs. Unprocessed keys are retried; exhausted retries throw <code>INCOMPLETE_READ</code>.</p><p><code>authorizationResource(job)</code> selects only the issuer, root account and inclusive account path for the existing authorization policy. Lookup records and display names never grant access. The existing list endpoint is not switched to these methods.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a> · listJobLocatorsForAccount / loadJobsFromLocators</span><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobStorage.mjs"><code>src/repositories/syncJobStorage.mjs</code></a> · readBatch; AC-3, 12</span></details>
-<div class="notice"><strong>Accepted limitation for unusually deep account paths (SC-001).</strong> A path containing 97 accounts needs 100 transaction items to create a job, but 101 to delete it because deletion also saves a <code>FENCE</code> record. Each operation checks its own complete budget; it never splits the write. The user accepted this unusual case without a creation-time guard.</div></section>
-<section id="contracts" aria-labelledby="contracts-heading"><div class="eyebrow">4 / Data model and contracts</div><h2 id="contracts-heading">What each stored record means</h2><p class="lineage">Caller’s job and operation → validated IDs, state and summary → derived database keys and input hash → job changes plus history → applied result, conflict or indeterminate outcome</p><div class="table-wrap" tabindex="0" role="region" aria-label="Data objects; scroll horizontally on narrow screens"><table><thead><tr><th scope="col">Object</th><th scope="col">Meaning, source and owner</th><th scope="col">Identifiers and rules</th></tr></thead><tbody>
-<tr><th scope="row">Job record</th><td>One Canvas issuer/section/SIS course/instructor mapping. Caller supplies facts; the model validates them and the repository owns writes. This record is the source of truth for the new storage API; code calls it the <em>canonical</em> job.</td><td>Public <code>job_id</code>: UUIDv4. Physical key: <code>SECTION#section / MAP#course#instructor</code>, in deployment-isolated tables. Desired ACTIVE/PAUSED is separate from execution IDLE/QUEUED/RUNNING/FAILED.</td></tr>
-<tr><th scope="row">Creator and account data</th><td>Creation-time facts supplied by a verified caller, persisted on the job. <code>creatorSubject</code> and <code>creatorCanvasUserId</code> are distinct identities. Names are captured display text.</td><td>Creator name/time are both populated or both null. Account path includes root through direct account. These fields cannot be changed by the repository’s mutation methods; course moves require recreation.</td></tr>
-<tr><th scope="row">Lookup records<br><code>locators</code> in code</th><td>Derived UUID/account entries pointing to a job. The repository creates and removes them with the job; a read must verify the referenced job.</td><td><code>JOB_ID#uuid / LOCATOR</code> and <code>ACCOUNT#account / JOB_ID#uuid</code>. Contain <code>job_id</code> and <code>canonicalKey</code>; never used alone to authorize access.</td></tr>
-<tr><th scope="row">Active run and section lock</th><td>The current worker’s ownership, recorded by a claim on both job and lock. The queued run ID comes from the caller’s job; claim adds worker, generation and lease.</td><td>Match job UUID + <code>runId</code> + <code>workerId</code> + <code>generation</code>. Lock key: <code>SECTION#section / LOCK</code>. No TTL cleanup or takeover after expiry.</td></tr>
-<tr><th scope="row">Operation event and deletion record</th><td>Repository-generated history of a committed operation. Includes input hash, actor or owner, transition and bounded result. Deletion also writes <code>FENCE</code> for the old UUID.</td><td><code>JOB_ID#uuid / EVENT#base64url(operationId)</code> or <code>FENCE</code>. Reads accept records only until their original 180-day expiry (rounded to seconds). History API exposes reads, with no independent edit/delete method.</td></tr>
-<tr><th scope="row"><code>lastRun</code></th><td>Latest completed run’s summary, supplied by the owner and sanitized by the model. Saved on the job and in its finish event.</td><td>Run ID, times, SUCCESS/FAILURE, nullable observed counts and safe error classification/text. Null count means unknown. Free-form upstream error text is replaced by a fixed description.</td></tr>
-</tbody></table></div><span class="evidence">Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> · JOB_FIELDS / normalizeLastRun</span><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobKeys.mjs"><code>src/repositories/syncJobKeys.mjs</code></a> · jobKey / locatorKey / accountKey / lockKey / operationKey / fenceKey</span>
-<details><summary>Encoding, expiry and information kept out of history</summary><p>Canvas IDs stay positive decimal strings, including values too large for safe JavaScript integers. SIS IDs lose surrounding whitespace but retain leading zeroes. <code>operationId</code> is a caller-supplied string used as-is, then reversibly encoded as UTF-8/base64url for the key. Events sort by that encoded ID, not by occurrence time.</p><p>A SHA-256 hash of normalized operation input and type detects changed-input reuse, including changed timestamps. Application times are integer Unix milliseconds; <code>expires_at</code> is the original occurrence time plus 180 days, rounded up to seconds. Reads ignore expired records even before DynamoDB physically removes them. A retry does not extend retention.</p><p>History excludes full job/mapping, creator-name and account/display snapshots. It retains actor or worker identities for internal use; it is not anonymous telemetry. It excludes raw upstream error payloads.</p><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobOperations.mjs"><code>src/repositories/syncJobOperations.mjs</code></a> · operationDigest / createOperationEvent</span><span class="evidence">Evidence: <a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"><code>src/repositories/syncJobHistoryRepository.mjs</code></a> · getOperation / getFence / query; AC-9, 10</span></details>
-<details><summary>Field types and stored shapes</summary><p><strong>All jobs:</strong> string UUID <code>job_id</code>; string mapping/deployment IDs; string creator subject and Canvas user ID; inclusive string account path; integer millisecond capture/creation times; creator/display snapshots; desired and execution states; nullable <code>activeRun</code> and <code>lastRun</code>. Fields are closed: extra or missing fields fail validation. State is supplied by the caller, not silently defaulted.</p><p><strong>Queued run:</strong> <code>{runId, queuedAt}</code>. <strong>Running run:</strong> adds <code>workerId, generation, startedAt, leaseExpiresAt</code>. Generation is a positive safe integer. <strong>Lock:</strong> keys plus <code>job_id, runId, workerId, generation, leaseExpiresAt</code>.</p><p><strong>Event:</strong> keys plus <code>job_id, operationId, operationType, inputDigest, occurredAt, expires_at, actor, owner, transition, result</code>. <strong>Deletion record:</strong> keys plus <code>job_id, operationId, occurredAt, expires_at</code>. Events retain the operation result, not a copy of the whole job.</p><p>See <a href="../../../../../docs/sync-manager-job-persistence.md">the complete persistence schema and synthetic JSON examples</a> for every required field, nullable value and operation result.</p></details><h3>Contract-to-code map</h3><p class="meta">Evidence links resolve within this checkout; labels also give portable repository paths. Test execution results come from validation r004 at this exact HEAD. This walkthrough independently checked the source claims without rerunning backend suites.</p><div class="table-wrap" tabindex="0" role="region" aria-label="Contract and test evidence; scroll horizontally on narrow screens"><table><thead><tr><th scope="col">Behavior / spec criteria</th><th scope="col">Implementation</th><th scope="col">Tests to read</th></tr></thead><tbody>
-<tr><th scope="row">Valid IDs, state and creator facts<br>AC-1, 14</th><td><a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a><br><a href="../../../../../src/repositories/syncJobOperations.mjs"><code>src/repositories/syncJobOperations.mjs</code></a></td><td><a href="../../../../../test/models/syncJob.test.mjs"><code>test/models/syncJob.test.mjs</code></a><br><a href="../../../../../test/repositories/syncJobRepository.test.mjs"><code>test/repositories/syncJobRepository.test.mjs</code></a></td></tr>
-<tr><th scope="row">Creation, reads, ownership and deletion<br>AC-2–8</th><td><a href="../../../../../src/repositories/syncJobRepository.mjs"><code>src/repositories/syncJobRepository.mjs</code></a></td><td><a href="../../../../../test/integration/syncJobPersistence.local.test.mjs"><code>test/integration/syncJobPersistence.local.test.mjs</code></a><br>Transactions, competing claims, pause/finish and delete/recreate cases.</td></tr>
-<tr><th scope="row">Lost responses, expiry and transaction limits<br>AC-9–12</th><td><a href="../../../../../src/repositories/syncJobStorage.mjs"><code>src/repositories/syncJobStorage.mjs</code></a><br><a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"><code>src/repositories/syncJobHistoryRepository.mjs</code></a><br><a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a></td><td><a href="../../../../../test/repositories/syncJobTransaction.test.mjs"><code>test/repositories/syncJobTransaction.test.mjs</code></a><br><a href="../../../../../test/clients/ddbPersistence.test.mjs"><code>test/clients/ddbPersistence.test.mjs</code></a><br>Response-loss and expiry cases in the local persistence suite.</td></tr>
-<tr><th scope="row">Table configuration without activation<br>AC-13</th><td><a href="../../../../../deploy/lti-sync-manager-template.yaml"><code>deploy/lti-sync-manager-template.yaml</code></a><br><a href="../../../../../docker/dynamodb/init-sync-manager-tables.sh"><code>docker/dynamodb/init-sync-manager-tables.sh</code></a></td><td><a href="../../../../../test/deploy/sync-manager-job-tables.test.mjs"><code>test/deploy/sync-manager-job-tables.test.mjs</code></a><br><a href="../../../../../test/integration/syncJobInitialization.local.test.mjs"><code>test/integration/syncJobInitialization.local.test.mjs</code></a></td></tr>
-</tbody></table></div><div class="notice"><h3>Validation and activation limits</h3><p><a href="../validation/validation-r004.md">Validation r004</a> independently assessed this exact base and HEAD and recommends MERGE for the inactive foundation. It reports 106 focused tests, 1,846 backend tests, 19 isolated DynamoDB Local integration tests, seven supplemental transaction probes, backend lint and all three SAM templates passing. The report also assesses adjacent personal tooling; that ignored tooling is outside this page’s feature scope.</p><p>External AWS permissions, deployed behavior, backup approval and production activation remain unassessed. Before activation, later features must carry verified creator identities, obtain account/name snapshots, save the first queued run and durable dispatch record together, and coordinate legacy shutdown. No source/spec discrepancy was identified for this walkthrough; SC-001 remains the accepted transaction-limit exception.</p></div></section><footer><p>Self-contained HTML with embedded CSS and SVG; no external assets or scripts. Evidence comes from the selected specification, scoped source and tests. Production integration is explicitly absent, not inferred.</p><p>Artifact QA: static HTML structure, local links, source paths, diagram coordinates, contrast and responsive/keyboard markup checked. <strong>Desktop and narrow-width browser rendering and interactive keyboard behavior: NOT ASSESSED.</strong> The available browser rejected the earlier local file URL under its security policy; no alternate browser or transport was attempted. Static geometry cannot establish rendered glyph bounds or absence of overlap. No browser access workaround was attempted.</p><p>Execution policy: codex-astra v1 · requested OpenAI gpt-6-astra / medium through stage launch controls · effective settings unverified · no substitutions. This explanation does not authorize publication, merge or deployment.</p></footer></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sync Manager job storage — review walkthrough r003</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <style>
+      html {
+        scroll-behavior: auto;
+      }
+      main {
+        max-width: 1160px;
+        margin: auto;
+        padding: 32px 28px;
+      }
+      section {
+        margin: 0 0 32px;
+        background: white;
+        border: 1px solid #c8d2dc;
+        border-radius: 14px;
+        padding: 28px;
+        scroll-margin-top: 20px;
+      }
+      h1 {
+        margin: 8px 0 18px;
+      }
+      h2 {
+        font-size: 27px;
+        line-height: 1.25;
+        margin: 0 0 16px;
+      }
+      h3 {
+        font-size: 19px;
+        line-height: 1.3;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 8px 0 14px;
+      }
+      a {
+        color: #125e9c;
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-thickness: 3px;
+      }
+      a:focus-visible,
+      summary:focus-visible,
+      .diagram:focus-visible,
+      .table-wrap:focus-visible {
+        outline: 3px solid #8b3800;
+        outline-offset: 4px;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 24px;
+        margin: 0 0 18px;
+      }
+      .lead {
+        max-width: 950px;
+      }
+      .notice {
+        border-left: 5px solid #965900;
+        background: #fff3db;
+        padding: 12px 16px;
+        margin: 16px 0;
+      }
+      .focus {
+        background: #eef4f9;
+        padding: 16px 20px;
+        border-radius: 8px;
+      }
+      .focus p {
+        margin: 4px 0;
+      }
+      .meta {
+        font-size: 13px;
+        color: #455b70;
+      }
+      .meta code {
+        font-size: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .card {
+        border: 1px solid #c8d2dc;
+        border-radius: 8px;
+        padding: 18px;
+      }
+      .evidence {
+        display: block;
+        font-size: 13px;
+        color: #455b70;
+        margin-top: 10px;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 0.88em;
+        overflow-wrap: anywhere;
+      }
+      figure {
+        margin: 20px 0;
+      }
+      .diagram {
+        overflow-x: auto;
+        border: 1px solid #c8d2dc;
+        border-radius: 10px;
+        background: #f9fbfd;
+        padding: 10px;
+      }
+      svg {
+        display: block;
+        width: 100%;
+        min-width: 770px;
+        height: auto;
+      }
+      svg text {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        fill: #162c40;
+        font-size: 16px;
+      }
+      svg .small {
+        font-size: 14px;
+      }
+      svg .bold {
+        font-weight: 700;
+      }
+      figcaption,
+      .legend {
+        font-size: 14px;
+        color: #455b70;
+        margin: 8px 0;
+      }
+      .legend {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .key:before {
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 12px;
+        margin-right: 6px;
+        border: 1px solid #61758a;
+        background: #e9eef3;
+      }
+      .key.new:before {
+        background: #e7f1fc;
+        border-color: #2d6396;
+      }
+      .key.store:before {
+        background: #e5f3ed;
+        border-color: #327559;
+      }
+      .key.external:before {
+        background: #fff3db;
+        border-style: dashed;
+        border-color: #965900;
+      }
+      .steps {
+        list-style: none;
+        counter-reset: steps;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .steps li {
+        counter-increment: steps;
+        border-top: 3px solid #2d6396;
+        padding: 14px 0;
+      }
+      .steps h3:before {
+        content: counter(steps) '. ';
+        color: #125e9c;
+      }
+      details {
+        border: 1px solid #c8d2dc;
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin: 12px 0;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 700;
+      }
+      details[open] summary {
+        margin-bottom: 14px;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 15px;
+        min-width: 760px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #c8d2dc;
+        padding: 13px 12px;
+      }
+      thead th {
+        background: #edf3f8;
+      }
+      tbody th {
+        width: 23%;
+      }
+      .lineage {
+        background: #eef4f9;
+        padding: 16px;
+        border-radius: 8px;
+      }
+      footer {
+        font-size: 13px;
+        color: #455b70;
+        padding: 0 12px 28px;
+      }
+      ul {
+        padding-left: 23px;
+      }
+      .skip {
+        position: absolute;
+        top: -100px;
+        background: white;
+        padding: 12px;
+      }
+      .skip:focus {
+        top: 4px;
+        left: 4px;
+      }
+      .sidenav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 56px;
+        height: 100vh;
+        background: #162c40;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 16px 0;
+        z-index: 20;
+      }
+      .sidenav a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        color: #dbe6f0;
+        text-decoration: none;
+      }
+      .sidenav a:hover {
+        background: #24405a;
+        color: white;
+      }
+      .sidenav a:focus-visible {
+        outline: 3px solid #8b3800;
+        outline-offset: 2px;
+      }
+      .sidenav svg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        min-width: 0;
+      }
+      .sidenav .label {
+        position: absolute;
+        left: 52px;
+        white-space: nowrap;
+        background: #162c40;
+        color: white;
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.12s;
+      }
+      .sidenav a:hover .label,
+      .sidenav a:focus-visible .label {
+        opacity: 1;
+      }
+      body {
+        padding-left: 56px;
+      }
+      @media (max-width: 700px) {
+        main {
+          padding: 18px 12px;
+        }
+        section {
+          padding: 20px 16px;
+        }
+        h1 {
+          font-size: 29px;
+        }
+        h2 {
+          font-size: 24px;
+        }
+        .lead {
+          font-size: 18px;
+        }
+        .grid,
+        .steps {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          gap: 10px 16px;
+        }
+        .sidenav {
+          width: 100%;
+          height: auto;
+          flex-direction: row;
+          justify-content: flex-start;
+          padding: 8px 12px;
+        }
+        .sidenav a {
+          width: auto;
+          padding: 0 6px;
+        }
+        .sidenav svg {
+          width: 20px;
+          height: 20px;
+        }
+        .sidenav .label {
+          position: static;
+          opacity: 1;
+          background: none;
+          color: #dbe6f0;
+          padding: 0 0 0 8px;
+        }
+        body {
+          padding-left: 0;
+        }
+      }
+      @media print {
+        body {
+          background: white;
+          padding-left: 0;
+        }
+        main {
+          max-width: none;
+          padding: 0;
+        }
+        section {
+          break-inside: avoid;
+          page-break-inside: auto;
+        }
+        nav,
+        .skip,
+        .sidenav {
+          display: none;
+        }
+        details {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="sidenav" aria-label="Site navigation">
+      <a href="../../index.html" aria-label="Back to all artifacts"
+        ><svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M15 18l-6-6 6-6" /></svg
+        ><span class="label">All artifacts</span></a
+      >
+    </nav>
+    <a class="skip" href="#overview">Skip to overview</a>
+    <main>
+      <nav aria-label="Walkthrough sections">
+        <a href="#overview">1. Overview</a><a href="#context">2. System context</a
+        ><a href="#runtime">3. Runtime walkthrough</a><a href="#contracts">4. Data model and contracts</a>
+      </nav>
+      <section id="overview" aria-labelledby="overview-heading">
+        <div class="eyebrow">1 / Overview</div>
+        <h1 id="overview-heading">Save sync jobs and track run ownership</h1>
+        <p class="lead">
+          This change adds storage for Sync Manager jobs and their operation history. It prevents duplicate mappings and
+          two workers claiming the same section, and lets a caller check whether a write succeeded when its response was
+          lost.
+        </p>
+        <p>
+          <strong>No production caller is connected.</strong> Synthetic internal callers supply jobs and worker
+          requests. The new repository saves jobs, lookup records and locks in one DynamoDB table, and operation results
+          in a second. Existing API, UI and worker behavior stays unchanged.
+        </p>
+        <div class="notice">
+          <strong>Validated at this HEAD.</strong>
+          <a href="../validation/validation-r004.md">Validation r004</a> recommends MERGE for this inactive foundation:
+          all 14 criteria pass, with no unresolved Critical, High or Medium findings.
+        </div>
+        <div class="focus">
+          <h3>Review focus</h3>
+          <p>
+            <strong>Start:</strong> <code>syncJobRepository.mjs</code>, especially <code>executeJobOperation</code> and
+            the helpers that build each operation’s writes.
+          </p>
+          <p>
+            <strong>Key decision:</strong> save each job change, related lock or lookup changes, and its history event
+            in one transaction.
+          </p>
+          <p>
+            <strong>Check closely:</strong> the expected job ID and current worker must still match when DynamoDB
+            commits; an old success must never stand in for current ownership.
+          </p>
+          <p>
+            <strong>Limits:</strong> no production dispatch or expired-lock takeover; unusually deep account paths can
+            require more deletion actions than one transaction allows.
+          </p>
+        </div>
+        <details>
+          <summary>Exact review baseline and source artifacts</summary>
+          <p class="meta">
+            <strong>Scope:</strong> full feature; no parent slices.<br /><strong>BASE_REF:</strong>
+            <code>d268d46f280cad1e3c72d91710f0715aad448614</code><br /><strong>HEAD_REF:</strong>
+            <code>688cba8c1a15430df081d29bf8e51b1354ecb012</code><br /><strong>HEAD tree:</strong>
+            <code>2defd126bb9c36b8cdbaefd891c8d96a2181274a</code><br /><strong>Generated:</strong>
+            2026-09-18T01:47:40+00:00 · approved <a href="../specification/spec-r002.md">spec r002</a> ·
+            <a href="../run.md">run index</a>
+          </p>
+        </details>
+      </section>
+      <section id="context" aria-labelledby="context-heading">
+        <div class="eyebrow">2 / System context</div>
+        <h2 id="context-heading">The repository owns the storage rules</h2>
+        <p>
+          Callers must authenticate and authorize access before using this API; current tests supply synthetic
+          identities and job data. The repository validates those inputs and decides which records must change together;
+          the DynamoDB client submits requests. This layer does not authenticate users or fetch Canvas/SIS data.
+        </p>
+        <figure>
+          <div
+            class="diagram"
+            tabindex="0"
+            role="region"
+            aria-label="System diagram; scroll horizontally on narrow screens"
+          >
+            <svg viewBox="0 0 980 500" role="img" aria-labelledby="context-title context-desc">
+              <title id="context-title">New storage modules and their current callers</title>
+              <desc id="context-desc">
+                Local tests call the new job model and repository. The repository uses the existing DynamoDB client with
+                added methods to read and write two new tables. Existing application handlers and workers are not
+                connected to this repository; Canvas and SIS are not called.
+              </desc>
+              <defs>
+                <marker
+                  id="context-arrow"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M0 0 L10 5 L0 10z" fill="#455b70" />
+                </marker>
+              </defs>
+              <rect
+                x="265"
+                y="15"
+                width="445"
+                height="470"
+                rx="14"
+                fill="none"
+                stroke="#8b9eb0"
+                stroke-dasharray="6 5"
+              />
+              <text x="285" y="42" class="small">APPLICATION MODULES</text>
+              <rect x="15" y="70" width="220" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396" />
+              <text x="31" y="99" class="bold">Local test caller</text>
+              <text x="31" y="123" class="small">Synthetic job and operation</text>
+              <rect x="290" y="70" width="390" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396" />
+              <text x="306" y="99" class="bold">Job model + repository</text>
+              <text x="306" y="123" class="small">Validate inputs; build each transaction</text>
+              <rect x="290" y="220" width="390" height="85" rx="10" fill="#e7f1fc" stroke="#2d6396" />
+              <text x="306" y="249" class="bold">DynamoDB client</text>
+              <text x="306" y="273" class="small">Existing client; added transaction / read methods</text>
+              <rect x="750" y="155" width="215" height="85" rx="10" fill="#e5f3ed" stroke="#327559" />
+              <text x="766" y="184" class="bold">Jobs table</text>
+              <text x="766" y="208" class="small">Jobs, lookups, locks</text>
+              <rect x="750" y="290" width="215" height="85" rx="10" fill="#e5f3ed" stroke="#327559" />
+              <text x="766" y="319" class="bold">History table</text>
+              <text x="766" y="343" class="small">Operation results, deletions</text>
+              <rect x="290" y="385" width="390" height="75" rx="10" fill="#e9eef3" stroke="#61758a" />
+              <text x="306" y="414" class="bold">Existing handlers + workers</text>
+              <text x="306" y="438" class="small">No calls to the new repository</text>
+              <rect
+                x="15"
+                y="385"
+                width="220"
+                height="75"
+                rx="10"
+                fill="#fff3db"
+                stroke="#965900"
+                stroke-dasharray="5 4"
+              />
+              <text x="31" y="414" class="bold">Canvas / SIS</text>
+              <text x="31" y="438" class="small">No calls from this feature</text>
+              <path d="M235 112 H290" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)" />
+              <path d="M485 155 V220" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#context-arrow)" />
+              <path
+                d="M680 253 H722 V198 H750"
+                fill="none"
+                stroke="#455b70"
+                stroke-width="2"
+                marker-end="url(#context-arrow)"
+              />
+              <path
+                d="M680 273 H722 V332 H750"
+                fill="none"
+                stroke="#455b70"
+                stroke-width="2"
+                marker-end="url(#context-arrow)"
+              />
+            </svg>
+          </div>
+          <figcaption>
+            Arrows show current calls and database requests. Components with no connecting arrow are outside this
+            feature’s runtime path.
+          </figcaption>
+        </figure>
+        <div class="legend" aria-label="Diagram legend">
+          <span class="key new">Added or changed</span><span class="key store">New persistent store</span
+          ><span class="key">Existing, unchanged</span><span class="key external">External system</span
+          ><span>Dashed outline: application modules</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <h3>Two new tables</h3>
+            <p>
+              <code>SyncManagerJobs</code> stores current jobs, lookup records and section locks.
+              <code>SyncManagerJobHistory</code> stores operation results and deleted-job records. SAM gives both
+              generated names, on-demand billing, deletion protection and retention on stack deletion/replacement.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../deploy/lti-sync-manager-template.yaml"
+                ><code>deploy/lti-sync-manager-template.yaml</code></a
+              >
+              · SyncManagerJobs / SyncManagerJobHistory</span
+            >
+          </div>
+          <div class="card">
+            <h3>Infrastructure does not activate a workflow</h3>
+            <p>
+              Only history has TTL cleanup. Jobs and locks do not expire automatically. Environment variables expose
+              table names, but this change adds no production caller or IAM policy. Deployment permissions, backup
+              approval and production integration remain separate work.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../docs/sync-manager-job-persistence.md"
+                ><code>docs/sync-manager-job-persistence.md</code></a
+              >
+              · Infrastructure and responsibilities before activation</span
+            >
+          </div>
+        </div>
+      </section>
+      <section id="runtime" aria-labelledby="runtime-heading">
+        <div class="eyebrow">3 / Runtime walkthrough</div>
+        <h2 id="runtime-heading">Create a job, claim its section, save the result</h2>
+        <p>
+          This path follows the local tests: they create an ACTIVE / QUEUED job, then call the repository as a worker.
+          No scheduler or Canvas synchronization runs here. Each successful operation also saves an event in the same
+          transaction. A lease is the recorded ownership deadline; expiry alone grants no replacement ownership.
+        </p>
+        <figure>
+          <div
+            class="diagram"
+            tabindex="0"
+            role="region"
+            aria-label="Numbered runtime diagram; scroll horizontally on narrow screens"
+          >
+            <svg viewBox="0 0 980 735" role="img" aria-labelledby="runtime-title runtime-desc">
+              <title id="runtime-title">A local test creates, claims and completes a sync job</title>
+              <desc id="runtime-desc">
+                Seven steps show input validation, replay checks, creation, verified lookup, claiming a section,
+                extending ownership and completion. Writes update the job and related records together with an operation
+                event. The text below explains each step and the failure paths.
+              </desc>
+              <defs>
+                <marker
+                  id="runtime-arrow"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M0 0 L10 5 L0 10z" fill="#455b70" />
+                </marker>
+              </defs>
+              <text x="70" y="30" class="small">ACTION</text>
+              <text x="302" y="30" class="small">COMPONENT AND CHECK</text>
+              <text x="728" y="30" class="small">RESULT</text>
+              <rect x="55" y="48" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="85" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="91" text-anchor="middle" class="bold">1</text>
+              <text x="70" y="91" class="bold">Validate job</text>
+              <text x="302" y="91" class="small">Model checks identity and state</text>
+              <text x="728" y="91" class="small">Normalized job + UUID</text>
+              <path d="M505 123 V144" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="144" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="181" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="187" text-anchor="middle" class="bold">2</text>
+              <text x="70" y="187" class="bold">Check request</text>
+              <text x="302" y="187" class="small">Repository checks input and history</text>
+              <text x="728" y="187" class="small">New or recorded result</text>
+              <path d="M505 219 V240" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="240" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="277" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="283" text-anchor="middle" class="bold">3</text>
+              <text x="70" y="283" class="bold">Save new job</text>
+              <text x="302" y="283" class="small">Create job, lookups and event</text>
+              <text x="728" y="283" class="small">One complete transaction</text>
+              <path d="M505 315 V336" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="336" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="373" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="379" text-anchor="middle" class="bold">4</text>
+              <text x="70" y="379" class="bold">Load for claim</text>
+              <text x="302" y="379" class="small">Read by UUID; verify stored job</text>
+              <text x="728" y="379" class="small">Matching job + queued run</text>
+              <path d="M505 411 V432" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="432" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="469" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="475" text-anchor="middle" class="bold">5</text>
+              <text x="70" y="475" class="bold">Claim run + section</text>
+              <text x="302" y="475" class="small">Set RUNNING; create absent lock</text>
+              <text x="728" y="475" class="small">One section owner</text>
+              <path d="M505 507 V528" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="528" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="565" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="571" text-anchor="middle" class="bold">6</text>
+              <text x="70" y="571" class="bold">Extend lease</text>
+              <text x="302" y="571" class="small">Match worker on job and lock</text>
+              <text x="728" y="571" class="small">Both expiry values updated</text>
+              <path d="M505 603 V624" fill="none" stroke="#455b70" stroke-width="2" marker-end="url(#runtime-arrow)" />
+              <rect x="55" y="624" width="900" height="75" rx="9" fill="#e7f1fc" stroke="#2d6396" />
+              <circle cx="24" cy="661" r="19" fill="#e5f3ed" stroke="#327559" />
+              <text x="24" y="667" text-anchor="middle" class="bold">7</text>
+              <text x="70" y="667" class="bold">Finish run</text>
+              <text x="302" y="667" class="small">Save result; clear run; delete lock</text>
+              <text x="728" y="667" class="small">IDLE / FAILED + history</text>
+            </svg>
+          </div>
+          <figcaption>
+            Read top to bottom. Each row’s number matches the explanation below. Blue boxes are repository/model
+            actions; arrows show call order.
+          </figcaption>
+        </figure>
+        <ol class="steps">
+          <li>
+            <h3>Validate the job data</h3>
+            <p>
+              <code>createSyncJob</code> assigns a UUIDv4 and validates mapping IDs, creator identities, account path,
+              snapshots and state. Canvas IDs remain strings; SIS IDs are trimmed without losing leading zeroes. This
+              step makes no storage call.
+            </p>
+            <span class="evidence"
+              >Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> ·
+              createSyncJob / normalizeSyncJob; spec AC-1, 14</span
+            >
+          </li>
+          <li>
+            <h3>Check the request and any earlier result</h3>
+            <p>
+              <code>create</code> requires the job, actor, operation ID and occurrence time. Unexpected fields and
+              inconsistent actor/time values are rejected before I/O. The repository then reads the history event for
+              this job and operation. Matching, unexpired input returns the saved result; reused IDs with different
+              input conflict.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobOperations.mjs"
+                ><code>src/repositories/syncJobOperations.mjs</code></a
+              >
+              · normalizeOperation / operationDigest; AC-9, 14</span
+            >
+          </li>
+          <li>
+            <h3>Save all creation records together</h3>
+            <p>
+              <code>addJobCreationWrites</code> builds conditional inserts for the job, its UUID lookup and each account
+              lookup. <code>executeJobOperation</code> adds the event, checks the whole transaction’s size and sends it.
+              All inserts succeed together; another job with the same section/course/instructor mapping returns
+              <code>already_exists</code>.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                ><code>src/repositories/syncJobRepository.mjs</code></a
+              >
+              · addJobCreationWrites / executeJobOperation; AC-2, 11</span
+            >
+          </li>
+          <li>
+            <h3>Load the requested job before claiming it</h3>
+            <p>
+              The next call supplies the job UUID, worker/run/generation and lease expiry. After checking input and
+              history, <code>getById</code> follows the UUID lookup to the job record. It verifies the stored UUID,
+              physical key, deployment and model. Missing or inconsistent records return <code>missing</code> to the
+              claim caller.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                ><code>src/repositories/syncJobRepository.mjs</code></a
+              >
+              · getById / readValidJobRecord; AC-3</span
+            >
+          </li>
+          <li>
+            <h3>Claim the job and lock the section</h3>
+            <p>
+              <code>addJobClaimWrites</code> requires ACTIVE / QUEUED and the same queued run ID. One transaction sets
+              RUNNING, saves the worker/run/generation and expiry, inserts a section lock only if absent, and records
+              the claim. A competing section claim returns <code>lock_conflict</code> and leaves its job queued.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                ><code>src/repositories/syncJobRepository.mjs</code></a
+              >
+              · addJobClaimWrites; AC-4, 5</span
+            >
+          </li>
+          <li>
+            <h3>Extend this worker’s lease</h3>
+            <p>
+              <code>heartbeat</code> requires the job UUID, run, worker and generation to match both job and lock. It
+              updates both lease-expiry values and records the result together. Neither expiry can move backward. Expiry
+              alone does not remove the lock or allow another worker to claim it.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                ><code>src/repositories/syncJobRepository.mjs</code></a
+              >
+              · addLeaseExtensionWrites / jobAndLockMatchOwner; AC-6</span
+            >
+          </li>
+          <li>
+            <h3>Save the outcome and release the lock</h3>
+            <p>
+              <code>finish</code> validates the matching owner and run times, then sets IDLE for SUCCESS or FAILED for
+              FAILURE. It saves the sanitized summary, clears <code>activeRun</code>, deletes that worker’s lock and
+              appends the event in one transaction. It leaves <code>desired_state</code> untouched, including a
+              concurrent pause.
+            </p>
+            <span class="evidence"
+              >Evidence:
+              <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                ><code>src/repositories/syncJobRepository.mjs</code></a
+              >
+              · addRunCompletionWrites; AC-6</span
+            >
+          </li>
+        </ol>
+        <details>
+          <summary>When the database may have committed but the response is lost</summary>
+          <p>
+            The client disables automatic SDK transaction retries. For an uncertain result, the repository reads the
+            exact operation event instead of resending the write. A matching unexpired event returns
+            <code>status: 'applied', recovered: true</code>. Missing, expired or unreadable history returns
+            <code>indeterminate</code>: the caller still cannot tell whether the write committed.
+          </p>
+          <p>
+            <code>checkOperationOutcome(type, input)</code> checks again without writing. The caller keeps the original
+            operation ID, input and timestamps. Use operation type <code>desired</code> when checking a
+            <code>changeDesiredState</code> result. Confirmed contention/capacity failures use bounded retries;
+            business-condition failures and invalid requests are handled separately.
+          </p>
+          <p>
+            For a recovered claim, <code>ownershipCurrent</code> is true only if the current job and section lock still
+            match that worker. A previously successful claim alone does not allow a worker to start external work.
+          </p>
+          <span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobRepository.mjs"
+              ><code>src/repositories/syncJobRepository.mjs</code></a
+            >
+            · checkOperationOutcome / checkRecordedOperationResult / executeJobOperation</span
+          ><span class="evidence"
+            >Evidence: <a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a> ·
+            transactWrite</span
+          ><span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/utils/errorClassifier.js"><code>src/utils/errorClassifier.js</code></a> ·
+            classifyDynamoDbTransactionError; AC-9, 12</span
+          >
+        </details>
+        <details>
+          <summary>Pause, deletion and delayed requests</summary>
+          <p>
+            <strong>Pause first:</strong> a later claim fails. <strong>Claim first:</strong> pause changes desired state
+            while the worker remains RUNNING and may still finish. Conditions are checked at commit, so a stale
+            preliminary read cannot overwrite another operation’s fields.
+          </p>
+          <p>
+            <strong>Delete:</strong> a nonrunning job can be removed together with every lookup record. The same
+            transaction saves a deletion event and a deleted-job record, called <code>FENCE</code> in storage. Running
+            jobs cannot be deleted.
+          </p>
+          <p>
+            A recreated mapping receives a new UUID. Every mutation checks the requested UUID; delayed requests for the
+            deleted job cannot modify its replacement, even after deletion history expires. There is no lock takeover or
+            recovery worker in this change.
+          </p>
+          <span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobRepository.mjs"
+              ><code>src/repositories/syncJobRepository.mjs</code></a
+            >
+            · addDesiredStateWrite / addJobDeletionWrites; AC-4–8</span
+          >
+        </details>
+        <details>
+          <summary>Account lookups find jobs; the job record supplies authorization data</summary>
+          <p>
+            <code>listJobLocatorsForAccount</code> returns lookup records and a continuation key.
+            <code>loadJobsFromLocators</code> batch-loads the matching jobs with consistent reads, checks their UUID,
+            key and deployment, and excludes missing or inconsistent jobs. Unprocessed keys are retried; exhausted
+            retries throw <code>INCOMPLETE_READ</code>.
+          </p>
+          <p>
+            <code>authorizationResource(job)</code> selects only the issuer, root account and inclusive account path for
+            the existing authorization policy. Lookup records and display names never grant access. The existing list
+            endpoint is not switched to these methods.
+          </p>
+          <span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobRepository.mjs"
+              ><code>src/repositories/syncJobRepository.mjs</code></a
+            >
+            · listJobLocatorsForAccount / loadJobsFromLocators</span
+          ><span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobStorage.mjs"
+              ><code>src/repositories/syncJobStorage.mjs</code></a
+            >
+            · readBatch; AC-3, 12</span
+          >
+        </details>
+        <div class="notice">
+          <strong>Accepted limitation for unusually deep account paths (SC-001).</strong> A path containing 97 accounts
+          needs 100 transaction items to create a job, but 101 to delete it because deletion also saves a
+          <code>FENCE</code> record. Each operation checks its own complete budget; it never splits the write. The user
+          accepted this unusual case without a creation-time guard.
+        </div>
+      </section>
+      <section id="contracts" aria-labelledby="contracts-heading">
+        <div class="eyebrow">4 / Data model and contracts</div>
+        <h2 id="contracts-heading">What each stored record means</h2>
+        <p class="lineage">
+          Caller’s job and operation → validated IDs, state and summary → derived database keys and input hash → job
+          changes plus history → applied result, conflict or indeterminate outcome
+        </p>
+        <div
+          class="table-wrap"
+          tabindex="0"
+          role="region"
+          aria-label="Data objects; scroll horizontally on narrow screens"
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Object</th>
+                <th scope="col">Meaning, source and owner</th>
+                <th scope="col">Identifiers and rules</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Job record</th>
+                <td>
+                  One Canvas issuer/section/SIS course/instructor mapping. Caller supplies facts; the model validates
+                  them and the repository owns writes. This record is the source of truth for the new storage API; code
+                  calls it the <em>canonical</em> job.
+                </td>
+                <td>
+                  Public <code>job_id</code>: UUIDv4. Physical key:
+                  <code>SECTION#section / MAP#course#instructor</code>, in deployment-isolated tables. Desired
+                  ACTIVE/PAUSED is separate from execution IDLE/QUEUED/RUNNING/FAILED.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Creator and account data</th>
+                <td>
+                  Creation-time facts supplied by a verified caller, persisted on the job.
+                  <code>creatorSubject</code> and <code>creatorCanvasUserId</code> are distinct identities. Names are
+                  captured display text.
+                </td>
+                <td>
+                  Creator name/time are both populated or both null. Account path includes root through direct account.
+                  These fields cannot be changed by the repository’s mutation methods; course moves require recreation.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Lookup records<br /><code>locators</code> in code</th>
+                <td>
+                  Derived UUID/account entries pointing to a job. The repository creates and removes them with the job;
+                  a read must verify the referenced job.
+                </td>
+                <td>
+                  <code>JOB_ID#uuid / LOCATOR</code> and <code>ACCOUNT#account / JOB_ID#uuid</code>. Contain
+                  <code>job_id</code> and <code>canonicalKey</code>; never used alone to authorize access.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Active run and section lock</th>
+                <td>
+                  The current worker’s ownership, recorded by a claim on both job and lock. The queued run ID comes from
+                  the caller’s job; claim adds worker, generation and lease.
+                </td>
+                <td>
+                  Match job UUID + <code>runId</code> + <code>workerId</code> + <code>generation</code>. Lock key:
+                  <code>SECTION#section / LOCK</code>. No TTL cleanup or takeover after expiry.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Operation event and deletion record</th>
+                <td>
+                  Repository-generated history of a committed operation. Includes input hash, actor or owner, transition
+                  and bounded result. Deletion also writes <code>FENCE</code> for the old UUID.
+                </td>
+                <td>
+                  <code>JOB_ID#uuid / EVENT#base64url(operationId)</code> or <code>FENCE</code>. Reads accept records
+                  only until their original 180-day expiry (rounded to seconds). History API exposes reads, with no
+                  independent edit/delete method.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>lastRun</code></th>
+                <td>
+                  Latest completed run’s summary, supplied by the owner and sanitized by the model. Saved on the job and
+                  in its finish event.
+                </td>
+                <td>
+                  Run ID, times, SUCCESS/FAILURE, nullable observed counts and safe error classification/text. Null
+                  count means unknown. Free-form upstream error text is replaced by a fixed description.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <span class="evidence"
+          >Evidence: <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a> ·
+          JOB_FIELDS / normalizeLastRun</span
+        ><span class="evidence"
+          >Evidence:
+          <a href="../../../../../src/repositories/syncJobKeys.mjs"><code>src/repositories/syncJobKeys.mjs</code></a> ·
+          jobKey / locatorKey / accountKey / lockKey / operationKey / fenceKey</span
+        >
+        <details>
+          <summary>Encoding, expiry and information kept out of history</summary>
+          <p>
+            Canvas IDs stay positive decimal strings, including values too large for safe JavaScript integers. SIS IDs
+            lose surrounding whitespace but retain leading zeroes. <code>operationId</code> is a caller-supplied string
+            used as-is, then reversibly encoded as UTF-8/base64url for the key. Events sort by that encoded ID, not by
+            occurrence time.
+          </p>
+          <p>
+            A SHA-256 hash of normalized operation input and type detects changed-input reuse, including changed
+            timestamps. Application times are integer Unix milliseconds; <code>expires_at</code> is the original
+            occurrence time plus 180 days, rounded up to seconds. Reads ignore expired records even before DynamoDB
+            physically removes them. A retry does not extend retention.
+          </p>
+          <p>
+            History excludes full job/mapping, creator-name and account/display snapshots. It retains actor or worker
+            identities for internal use; it is not anonymous telemetry. It excludes raw upstream error payloads.
+          </p>
+          <span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobOperations.mjs"
+              ><code>src/repositories/syncJobOperations.mjs</code></a
+            >
+            · operationDigest / createOperationEvent</span
+          ><span class="evidence"
+            >Evidence:
+            <a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"
+              ><code>src/repositories/syncJobHistoryRepository.mjs</code></a
+            >
+            · getOperation / getFence / query; AC-9, 10</span
+          >
+        </details>
+        <details>
+          <summary>Field types and stored shapes</summary>
+          <p>
+            <strong>All jobs:</strong> string UUID <code>job_id</code>; string mapping/deployment IDs; string creator
+            subject and Canvas user ID; inclusive string account path; integer millisecond capture/creation times;
+            creator/display snapshots; desired and execution states; nullable <code>activeRun</code> and
+            <code>lastRun</code>. Fields are closed: extra or missing fields fail validation. State is supplied by the
+            caller, not silently defaulted.
+          </p>
+          <p>
+            <strong>Queued run:</strong> <code>{runId, queuedAt}</code>. <strong>Running run:</strong> adds
+            <code>workerId, generation, startedAt, leaseExpiresAt</code>. Generation is a positive safe integer.
+            <strong>Lock:</strong> keys plus <code>job_id, runId, workerId, generation, leaseExpiresAt</code>.
+          </p>
+          <p>
+            <strong>Event:</strong> keys plus
+            <code
+              >job_id, operationId, operationType, inputDigest, occurredAt, expires_at, actor, owner, transition,
+              result</code
+            >. <strong>Deletion record:</strong> keys plus <code>job_id, operationId, occurredAt, expires_at</code>.
+            Events retain the operation result, not a copy of the whole job.
+          </p>
+          <p>
+            See
+            <a href="../../../../../docs/sync-manager-job-persistence.md"
+              >the complete persistence schema and synthetic JSON examples</a
+            >
+            for every required field, nullable value and operation result.
+          </p>
+        </details>
+        <h3>Contract-to-code map</h3>
+        <p class="meta">
+          Evidence links resolve within this checkout; labels also give portable repository paths. Test execution
+          results come from validation r004 at this exact HEAD. This walkthrough independently checked the source claims
+          without rerunning backend suites.
+        </p>
+        <div
+          class="table-wrap"
+          tabindex="0"
+          role="region"
+          aria-label="Contract and test evidence; scroll horizontally on narrow screens"
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Behavior / spec criteria</th>
+                <th scope="col">Implementation</th>
+                <th scope="col">Tests to read</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Valid IDs, state and creator facts<br />AC-1, 14</th>
+                <td>
+                  <a href="../../../../../src/models/syncJob.mjs"><code>src/models/syncJob.mjs</code></a
+                  ><br /><a href="../../../../../src/repositories/syncJobOperations.mjs"
+                    ><code>src/repositories/syncJobOperations.mjs</code></a
+                  >
+                </td>
+                <td>
+                  <a href="../../../../../test/models/syncJob.test.mjs"><code>test/models/syncJob.test.mjs</code></a
+                  ><br /><a href="../../../../../test/repositories/syncJobRepository.test.mjs"
+                    ><code>test/repositories/syncJobRepository.test.mjs</code></a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Creation, reads, ownership and deletion<br />AC-2–8</th>
+                <td>
+                  <a href="../../../../../src/repositories/syncJobRepository.mjs"
+                    ><code>src/repositories/syncJobRepository.mjs</code></a
+                  >
+                </td>
+                <td>
+                  <a href="../../../../../test/integration/syncJobPersistence.local.test.mjs"
+                    ><code>test/integration/syncJobPersistence.local.test.mjs</code></a
+                  ><br />Transactions, competing claims, pause/finish and delete/recreate cases.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Lost responses, expiry and transaction limits<br />AC-9–12</th>
+                <td>
+                  <a href="../../../../../src/repositories/syncJobStorage.mjs"
+                    ><code>src/repositories/syncJobStorage.mjs</code></a
+                  ><br /><a href="../../../../../src/repositories/syncJobHistoryRepository.mjs"
+                    ><code>src/repositories/syncJobHistoryRepository.mjs</code></a
+                  ><br /><a href="../../../../../src/clients/ddbClient.js"><code>src/clients/ddbClient.js</code></a>
+                </td>
+                <td>
+                  <a href="../../../../../test/repositories/syncJobTransaction.test.mjs"
+                    ><code>test/repositories/syncJobTransaction.test.mjs</code></a
+                  ><br /><a href="../../../../../test/clients/ddbPersistence.test.mjs"
+                    ><code>test/clients/ddbPersistence.test.mjs</code></a
+                  ><br />Response-loss and expiry cases in the local persistence suite.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Table configuration without activation<br />AC-13</th>
+                <td>
+                  <a href="../../../../../deploy/lti-sync-manager-template.yaml"
+                    ><code>deploy/lti-sync-manager-template.yaml</code></a
+                  ><br /><a href="../../../../../docker/dynamodb/init-sync-manager-tables.sh"
+                    ><code>docker/dynamodb/init-sync-manager-tables.sh</code></a
+                  >
+                </td>
+                <td>
+                  <a href="../../../../../test/deploy/sync-manager-job-tables.test.mjs"
+                    ><code>test/deploy/sync-manager-job-tables.test.mjs</code></a
+                  ><br /><a href="../../../../../test/integration/syncJobInitialization.local.test.mjs"
+                    ><code>test/integration/syncJobInitialization.local.test.mjs</code></a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="notice">
+          <h3>Validation and activation limits</h3>
+          <p>
+            <a href="../validation/validation-r004.md">Validation r004</a> independently assessed this exact base and
+            HEAD and recommends MERGE for the inactive foundation. It reports 106 focused tests, 1,846 backend tests, 19
+            isolated DynamoDB Local integration tests, seven supplemental transaction probes, backend lint and all three
+            SAM templates passing. The report also assesses adjacent personal tooling; that ignored tooling is outside
+            this page’s feature scope.
+          </p>
+          <p>
+            External AWS permissions, deployed behavior, backup approval and production activation remain unassessed.
+            Before activation, later features must carry verified creator identities, obtain account/name snapshots,
+            save the first queued run and durable dispatch record together, and coordinate legacy shutdown. No
+            source/spec discrepancy was identified for this walkthrough; SC-001 remains the accepted transaction-limit
+            exception.
+          </p>
+        </div>
+      </section>
+      <footer>
+        <p>
+          Self-contained HTML with embedded CSS and SVG; no external assets or scripts. Evidence comes from the selected
+          specification, scoped source and tests. Production integration is explicitly absent, not inferred.
+        </p>
+        <p>
+          Artifact QA: static HTML structure, local links, source paths, diagram coordinates, contrast and
+          responsive/keyboard markup checked.
+          <strong>Desktop and narrow-width browser rendering and interactive keyboard behavior: NOT ASSESSED.</strong>
+          The available browser rejected the earlier local file URL under its security policy; no alternate browser or
+          transport was attempted. Static geometry cannot establish rendered glyph bounds or absence of overlap. No
+          browser access workaround was attempted.
+        </p>
+        <p>
+          Execution policy: codex-astra v1 · requested OpenAI gpt-6-astra / medium through stage launch controls ·
+          effective settings unverified · no substitutions. This explanation does not authorize publication, merge or
+          deployment.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
